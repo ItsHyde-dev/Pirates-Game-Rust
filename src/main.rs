@@ -50,7 +50,7 @@ fn setup(
         })
         .insert(MainCamera {});
 
-    create_water_map(&mut commands, &asset_server);
+    create_water_map(&mut commands, &asset_server, &window_size);
 
     Ship::spawn_player(commands, asset_server, window_size);
 

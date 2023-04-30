@@ -26,8 +26,8 @@ impl Ship {
             SpriteBundle {
                 texture: player_sprite,
                 transform: Transform::from_xyz(
-                    (window_size.width / 2.0) + 64.0,
-                    (window_size.height / 2.0) + 64.0,
+                    (window_size.width / 2.0),
+                    (window_size.height / 2.0),
                     0.0,
                 )
                 .with_rotation(Quat::from_rotation_z((180.0_f32).to_radians())),
@@ -86,8 +86,6 @@ impl Ship {
             let collision = Self::check_collision(transform.translation + moved, &wall_query);
 
             if collision {
-                println!("Collision");
-
                 return;
             }
 
