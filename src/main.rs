@@ -1,4 +1,7 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{
+    prelude::*,
+    window::{PrimaryWindow, WindowResolution},
+};
 mod entities;
 mod plugins;
 mod utils;
@@ -8,7 +11,14 @@ use utils::structs::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                resolution: WindowResolution::new(1280.0, 720.0),
+                resizable: false,
+                ..default()
+            }),
+            ..default()
+        }))
         .add_startup_system(setup)
         .add_system(Ship::move_ship)
         .run();
@@ -23,24 +33,24 @@ fn setup(
 
     window.title = "Rust Game".to_string();
 
-    window.set_maximized(true);
-
     let window_size = WindowSize {
         height: window.height(),
         width: window.width(),
     };
 
-    let water: Handle<Image> = asset_server.load("water.png");
-    commands.spawn(Camera2dBundle {
-        transform: Transform::from_xyz(
-            (window.width() / 2.0) + 64.0,
-            (window.height() / 2.0) + 64.0,
-            0.0,
-        ),
-        ..default()
+    commands.insert_resource(WindowSize {
+        height: window.height(),
+        width: window.width(),
     });
 
-    create_water_map(&mut commands, water.clone());
+    commands
+        .spawn(Camera2dBundle {
+            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 0.0),
+            ..default()
+        })
+        .insert(MainCamera {});
+
+    create_water_map(&mut commands, &asset_server);
 
     Ship::spawn_player(commands, asset_server, window_size);
 
