@@ -19,7 +19,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_startup_system(setup)
+        .add_startup_systems((create_water_map, setup))
         .add_system(Ship::move_ship)
         .run();
 }
@@ -49,8 +49,6 @@ fn setup(
             ..default()
         })
         .insert(MainCamera {});
-
-    create_water_map(&mut commands, &asset_server, &window_size);
 
     Ship::spawn_player(commands, asset_server, window_size);
 
